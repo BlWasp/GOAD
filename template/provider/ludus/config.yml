@@ -1,2 +1,10 @@
 {{lab}}
 {{extensions}}
+
+# range network rules (https://docs.ludus.cloud/docs/configuration)
+# wireguard_vlan_default: allow the lab vms to reach the clients connected to the ludus wireguard (198.51.100.0/24)
+# (ludus default is REJECT : responder, ntlm relay, reverse shells to your machine would not work)
+network:
+  inter_vlan_default: ACCEPT
+  external_default: ACCEPT
+  wireguard_vlan_default: ACCEPT

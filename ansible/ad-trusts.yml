@@ -11,6 +11,19 @@
   roles:
   - { role: 'settings/disable_nat_adapter' , tags: 'disable_nat_adapter'}
   - { role: 'dns_conditional_forwarder', tags: 'dns_conditional_forwarder' }
+  tasks:
+  # a domain declares only one trust in config.json : also forward to the domains declaring a trust to this one
+  # (needed before the trust creation when the trusts are not mutual, ex: sccm.lab -> sevenkingdoms.local)
+  - name: "Add dns forwarder zone for incoming trusts"
+    community.windows.win_dns_zone:
+      name: "{{item}}"
+      type: forwarder
+      replication: "{{replication}}"
+      dns_servers:
+        - "{{hostvars[lab.domains[item].dc].ansible_host}}"
+    loop: "{{lab.domains.keys() | list}}"
+    when: item != remote_forest and (lab.domains[item].trust | default('')) == domain
+    tags: 'dns_conditional_forwarder'
   vars:
     domain: "{{lab.hosts[dict_key].domain}}"
     remote_forest: "{{lab.domains[domain].trust}}"

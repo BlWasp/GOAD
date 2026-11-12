@@ -11,6 +11,8 @@
     - [SCCM](SCCM.md) : 4 vms, 1 forest, 1 domain, with microsoft configuration manager installed
     ![SCCM overview](../img/SCCMLAB_overview.png)
 
+    - [FULL-GOAD-SCCM](FULL-GOAD-SCCM.md) : 9 vms, 3 forests, 4 domains (GOAD + SCCM merged, sccm.lab trusted with sevenkingdoms.local)
+
 - Challenge lab :
     - [NHA](NHA.md) : A challenge with 5 vms and 2 domains. no schema provided, you will have to find out how break it.
 

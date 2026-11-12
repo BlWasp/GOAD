@@ -1,0 +1,22 @@
+boxes = [
+  # ---------------- GOAD ----------------
+  # windows server 2019 - kingslanding (sevenkingdoms.local)
+  { :name => "{{lab_name}}-DC01",  :ip => "{{ip_range}}.10", :box => "StefanScherer/windows_2019", :box_version => "2021.05.15", :os => "windows", :cpus => 2, :mem => 3000},
+  # windows server 2019 - winterfell (north.sevenkingdoms.local)
+  { :name => "{{lab_name}}-DC02",  :ip => "{{ip_range}}.11", :box => "StefanScherer/windows_2019", :box_version => "2021.05.15", :os => "windows", :cpus => 2, :mem => 3000},
+  # windows server 2016 - meereen (essos.local)
+  { :name => "{{lab_name}}-DC03",  :ip => "{{ip_range}}.12", :box => "StefanScherer/windows_2016", :box_version => "2017.12.14", :os => "windows", :cpus => 2, :mem => 3000},
+  # windows server 2019 - castelblack (north.sevenkingdoms.local)
+  { :name => "{{lab_name}}-SRV02", :ip => "{{ip_range}}.22", :box => "StefanScherer/windows_2019", :box_version => "2021.05.15", :os => "windows", :cpus => 2, :mem => 6000},
+  # windows server 2016 - braavos (essos.local)
+  { :name => "{{lab_name}}-SRV03", :ip => "{{ip_range}}.23", :box => "StefanScherer/windows_2016", :box_version => "2019.02.14", :os => "windows", :cpus => 2, :mem => 5000},
+  # ---------------- SCCM ----------------
+  # windows server 2019 - DC (sccm.lab)
+  { :name => "{{lab_name}}-DC04",  :ip => "{{ip_range}}.40", :box => "mayfly/windows_server2019", :os => "windows", :cpus => 2, :mem => 4000},
+  # windows server 2019 - MECM (sccm.lab)
+  { :name => "{{lab_name}}-SRV04", :ip => "{{ip_range}}.41", :box => "mayfly/windows_server2019", :os => "windows", :cpus => 2, :mem => 4000},
+  # windows server 2019 - MSSQL (sccm.lab)
+  { :name => "{{lab_name}}-SRV05", :ip => "{{ip_range}}.42", :box => "mayfly/windows_server2019", :os => "windows", :cpus => 2, :mem => 4000},
+  # windows server 2019 - CLIENT (sccm.lab)
+  { :name => "{{lab_name}}-WS02",  :ip => "{{ip_range}}.43", :box => "mayfly/windows_server2019", :os => "windows", :cpus => 2, :mem => 4000}
+]

@@ -6,7 +6,8 @@
 - name: "Setup Prerequisites"
   hosts: dc
   roles:
-    - { role: 'dhcp', tags: 'dhcp_install'}
+    # only on the dc of a domain with sccm configuration (dhcp is used for sccm pxe)
+    - { role: 'dhcp', tags: 'dhcp_install', when: sccm_server != ''}
   vars:
     domain: "{{lab.hosts[dict_key].domain}}"
     domain_username: "{{domain}}\\{{admin_user}}"

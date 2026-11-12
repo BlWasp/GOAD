@@ -66,7 +66,41 @@
   win_get_url:
       url: "{{download_url}}"
       dest: 'c:\setup\mssql\sql_installer.exe'
-  when: not installer_file.stat.exists
+  when: not installer_file.stat.exists and sql_version != 'MSSQL_2022'
+
+# SQL Server 2022 : the SSEI bootstrapper (SQL2022-SSEI-Eval.exe) is retired by Microsoft and hangs on a hidden
+# "This version of the installer is no longer supported" dialog under WinRM, use the full iso media instead
+- name: check downloaded iso exists (MSSQL 2022)
+  win_stat:
+    path: c:\setup\mssql\sql_installer.iso
+  register: installer_iso
+  when: sql_version == 'MSSQL_2022'
+
+- name: get the iso (MSSQL 2022 ~1.1GB)
+  win_get_url:
+      url: "{{download_url}}"
+      dest: 'c:\setup\mssql\sql_installer.iso'
+  when: sql_version == 'MSSQL_2022' and not installer_iso.stat.exists
+
+- name: extract the iso to the media folder (MSSQL 2022)
+  win_shell: |
+    if (Test-Path c:\setup\mssql\media\setup.exe) { Write-Output "ok"; exit 0 }
+    $iso = "c:\setup\mssql\sql_installer.iso"
+    $image = Mount-DiskImage -ImagePath $iso -PassThru
+    try {
+      $driveLetter = ($image | Get-Volume).DriveLetter
+      Copy-Item -Path "${driveLetter}:\*" -Destination c:\setup\mssql\media -Recurse -Force
+    } finally {
+      Dismount-DiskImage -ImagePath $iso | Out-Null
+    }
+    Write-Output "changed"
+  register: iso_extract
+  changed_when: "'changed' in iso_extract.stdout"
+  when: sql_version == 'MSSQL_2022'
+
+- name: Set install command
+  set_fact:
+    mssql_install_cmd: "{{ 'c:\\setup\\mssql\\media\\setup.exe /configurationfile=c:\\setup\\mssql\\sql_conf.ini /IACCEPTSQLSERVERLICENSETERMS /QUIET' if sql_version == 'MSSQL_2022' else 'c:\\setup\\mssql\\sql_installer.exe /configurationfile=c:\\setup\\mssql\\sql_conf.ini /IACCEPTSQLSERVERLICENSETERMS /MEDIAPATH=c:\\setup\\mssql\\media /QUIET /HIDEPROGRESSBAR' }}"
 
 - name: Add service account to Log on as a service
   win_user_right:
@@ -97,7 +131,7 @@
 
 # Install the database with a domain admin user
 - name: Install the database
-  win_command: c:\setup\mssql\sql_installer.exe /configurationfile=c:\setup\mssql\sql_conf.ini /IACCEPTSQLSERVERLICENSETERMS /MEDIAPATH=c:\setup\mssql\media /QUIET /HIDEPROGRESSBAR
+  win_command: "{{ mssql_install_cmd }}"
   args:
     chdir: c:\setup
   vars:

@@ -44,6 +44,8 @@ This lab use free Windows VM only (180 days). After that delay enter a license o
 <img alt="SCCM" width="600" src="./docs/img/SCCMLAB_overview.png">
 </div>
 
+- [FULL-GOAD-SCCM](./ad/FULL-GOAD-SCCM/README.md) : 9 vms, 3 forests, 4 domains (GOAD + SCCM merged in one lab, sccm.lab trusted with sevenkingdoms.local)
+
 - [NHA](https://orange-cyberdefense.github.io/GOAD/labs/NHA/) : A challenge with 5 vms and 2 domains. no schema provided, you will have to find out how break it.
 <div align="center">
 <img alt="SCCM" width="600" src="./docs/img/logo_NHA.jpeg">

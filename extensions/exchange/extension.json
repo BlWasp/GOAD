@@ -7,7 +7,8 @@
     "compatibility": [
         "GOAD",
         "GOAD-Light",
-        "GOAD-Mini"
+        "GOAD-Mini",
+        "FULL-GOAD-SCCM"
     ],
     "impact": "Modify the ad schema and add a computer (warning the exchange machine is really heavy)"
 }

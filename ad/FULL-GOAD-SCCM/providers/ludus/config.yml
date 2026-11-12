@@ -1,0 +1,84 @@
+ludus:
+  # ---------------- GOAD ----------------
+  - vm_name: "{{ range_id }}-DC01"
+    hostname: "{{ range_id }}-DC01"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-DC02"
+    hostname: "{{ range_id }}-DC02"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-DC03"
+    hostname: "{{ range_id }}-DC03"
+    template: win2016-server-x64-template
+    vlan: 10
+    ip_last_octet: 12
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-SRV02"
+    hostname: "{{ range_id }}-SRV02"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 22
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-SRV03"
+    hostname: "{{ range_id }}-SRV03"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 23
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  # ---------------- SCCM ----------------
+  - vm_name: "{{ range_id }}-DC04"
+    hostname: "{{ range_id }}-DC04"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 40
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-SRV04"
+    hostname: "{{ range_id }}-SRV04"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 41
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-SRV05"
+    hostname: "{{ range_id }}-SRV05"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 42
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+  - vm_name: "{{ range_id }}-WS02"
+    hostname: "{{ range_id }}-WS02"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 43
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true

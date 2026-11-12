@@ -8,8 +8,8 @@ sql_version: MSSQL_2019
 
 # SQL2019-SSEI-Expr.exe
 download_url_2019: https://go.microsoft.com/fwlink/?linkid=866658
-# SQL2022-SSEI-Eval.exe
-download_url_2022: https://go.microsoft.com/fwlink/?linkid=2215202&clcid=0x409&culture=en-us&country=us
+# SQLServer2022-x64-ENU.iso (evaluation media, the SQL2022-SSEI-Eval.exe bootstrapper is no longer supported by Microsoft)
+download_url_2022: https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-x64-ENU.iso
 
 connection_type_2019: "-E"
 connection_type_2022: "-S 127.0.0.1,1433"

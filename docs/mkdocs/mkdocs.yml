@@ -25,6 +25,7 @@ nav:
     - NHA: labs/NHA.md
     - DRACARYS: labs/DRACARYS.md
     - SCCM: labs/SCCM.md
+    - FULL-GOAD-SCCM: labs/FULL-GOAD-SCCM.md
     - MINILAB: labs/MINILAB.md
   - 📈 Extensions:
     - index: extensions/index.md
