@@ -6,6 +6,7 @@ the 3 GOAD domains (2 forests) + the `sccm.lab` forest with Microsoft Configurat
 - GOAD part is identical to the GOAD lab (same users, groups, ACLs, vulnerabilities and scenarios)
 - SCCM part is identical to the SCCM lab (same users, site configuration, NAA, client push, PXE...)
 - A bidirectional forest trust is added between `sccm.lab` and `sevenkingdoms.local`
+- 5 cross-forest attack paths are added between `sccm.lab` and `sevenkingdoms.local` (see below)
 - Extensions (exchange, ws01, lx01, elk, wazuh, guacamole) stay optional and can be added on demand
 
 ## Servers
@@ -35,6 +36,35 @@ Trusts :
 
 - `sevenkingdoms.local` <-> `essos.local` (bidirectional forest trust, same as GOAD)
 - `sccm.lab` <-> `sevenkingdoms.local` (bidirectional forest trust)
+
+## Cross-forest attack paths (sccm.lab <-> sevenkingdoms.local)
+
+A forest trust applies SID filtering by default : classic intra-forest primitives (SID history,
+golden/diamond ticket reuse) do not cross it. The paths below use what genuinely crosses a forest
+trust : foreign security principal membership, ACLs granted to a foreign principal, shared secrets,
+and application-level trust (SCCM managing clients across the trust).
+
+**GOAD -> SCCM**
+
+- **A. Kerberoast + password reuse** : `ravens_svc` (sevenkingdoms.local, SPN `HTTP/kingslanding.sevenkingdoms.local`)
+  shares its password with `dave` (sccm.lab, member of `SCCM-Admins` -> CM console Full Administrator).
+  Kerberoast `ravens_svc` on the GOAD side, crack it, reuse the password as `dave` on sccm.lab.
+- **B. Foreign security principal in a domain-local group** : `sevenkingdoms.local\maester.pycelle` is a
+  member of `sccm.lab`'s domain-local group `SCCM-Support-Access`, which is a local Administrator on MECM (srv04).
+
+**SCCM -> GOAD**
+
+- **C. SCCM push account with cross-forest local admin** : `sccm.lab\sccm-client-push` (the SCCM client
+  push account) is a local Administrator on castelblack (srv02, north.sevenkingdoms.local) - realistic for
+  a shared SCCM hierarchy managing machines in both forests.
+- **D. Cross-forest ACL (DCSync)** : `sccm.lab\sccm-account-da` (already Domain Admin of sccm.lab) has been
+  granted `DS-Replication-Get-Changes` and `DS-Replication-Get-Changes-All` on `sevenkingdoms.local`'s domain
+  root - a legacy over-permissioned "monitoring" grant. Taking over the SCCM site (or `sccm-account-da`
+  directly) allows a DCSync of sevenkingdoms.local.
+- **E. Coercion + NTLM relay to ADCS (ESC8)** : no extra data needed. sevenkingdoms.local's CA (dc01) has web
+  enrollment enabled by default and its firewall disabled. From a foothold in sccm.lab, coerce a sevenkingdoms
+  host (PetitPotam/dfscoerce/printerbug) and relay the authentication to `http://kingslanding.sevenkingdoms.local/certsrv/`
+  to obtain a certificate for the coerced account.
 
 ## Network
 

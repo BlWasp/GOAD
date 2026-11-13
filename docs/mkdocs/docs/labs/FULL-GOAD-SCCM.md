@@ -28,6 +28,13 @@ the 3 GOAD domains (2 forests) + the `sccm.lab` forest with Microsoft Configurat
 - `sevenkingdoms.local` <-> `essos.local` (bidirectional forest trust, same as GOAD)
 - `sccm.lab` <-> `sevenkingdoms.local` (bidirectional forest trust)
 
+## Cross-forest attack paths
+
+5 attack paths connect `sccm.lab` and `sevenkingdoms.local` through the forest trust : Kerberoast + password
+reuse, a foreign security principal in a domain-local group, a cross-forest local admin grant on the SCCM
+push account, a cross-forest ACL granting DCSync rights, and coercion + NTLM relay to ADCS (ESC8). See the
+[lab README](https://github.com/Orange-Cyberdefense/GOAD/blob/main/ad/FULL-GOAD-SCCM/README.md#cross-forest-attack-paths-sccmlab---sevenkingdomslocal) for the full detail of each path.
+
 ## Providers
 
 - vmware_esxi, proxmox, ludus

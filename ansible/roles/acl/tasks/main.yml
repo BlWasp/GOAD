@@ -1,4 +1,6 @@
 # acl : $for, $to, $right, $inheritance
+# $for and $to can be cross-domain/cross-forest : prefix with "domain\" (e.g. "sccm.lab\sccm-account-da")
+# to resolve the object on that domain's DC (trust required). Plain names are resolved locally.
 ## acl values :
 # AccessSystemSecurity
 # CreateChild
@@ -143,11 +145,18 @@
                    'Ext-Self-Self-Membership',
                    'Ext-Write-Self-Membership',
                    'Ext-ManageCA',
-                   'Ext-Write-SPN'
+                   'Ext-Write-SPN',
+                   'Ext-DS-Replication-Get-Changes',
+                   'Ext-DS-Replication-Get-Changes-All'
       if ($for.StartsWith("NT AUTHORITY")) {
         $forSID = New-Object System.Security.Principal.NTAccount "$for"
       } else {
-        $forSID = New-Object System.Security.Principal.SecurityIdentifier (Get-ADObject -Filter "SamAccountName -eq '$for'" -Properties objectSID).objectSID
+        $for_extra_args = @{}
+        if ($for -match "\\") {
+          $for_extra_args.Server = $for.Split("\")[0]
+          $for = $for.Split("\")[1]
+        }
+        $forSID = New-Object System.Security.Principal.SecurityIdentifier (Get-ADObject -Filter "SamAccountName -eq '$for'" -Properties objectSID @for_extra_args).objectSID
       }
 
       try {
@@ -178,6 +187,8 @@
         "Ext-Self-Self-Membership" = @("Self","bf9679c0-0de6-11d0-a285-00aa003049e2")
         "Ext-ManageCA" = @("ExtendedRight","18e470eb-9b98-47c5-896e-146c5c77100d")
         "Ext-Write-SPN" = @("WriteProperty","f3a64788-5306-11d1-a9c5-0000f80367c1")
+        "Ext-DS-Replication-Get-Changes" = @("ExtendedRight","1131f6aa-9c07-11d1-f79f-00c04fc2dcd2")
+        "Ext-DS-Replication-Get-Changes-All" = @("ExtendedRight","1131f6ad-9c07-11d1-f79f-00c04fc2dcd2")
       }
 
       $Ansible.Changed = $false

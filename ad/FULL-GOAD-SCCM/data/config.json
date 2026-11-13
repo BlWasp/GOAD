@@ -94,7 +94,8 @@
             "use_laps": false,
             "local_groups" : {
                 "Administrators" : [
-                    "north\\jeor.mormont"
+                    "north\\jeor.mormont",
+                    "sccmlab\\sccm-client-push"
                 ],
                 "Remote Desktop Users" : [
                     "north\\Night Watch",
@@ -263,7 +264,8 @@
             "local_groups" : {
                 "Administrators" : [
                     "SCCMLAB\\LocalAdmins",
-                    "SCCMLAB\\SCCM-Admins"
+                    "SCCMLAB\\SCCM-Admins",
+                    "SCCMLAB\\SCCM-Support-Access"
                 ],
                 "Remote Desktop Users" : [
                     "SCCMLAB\\RDPUsers"
@@ -680,7 +682,9 @@
                 "GenericAll_group_acrrosdom_dc" : {"for": "AcrossTheNarrowSea", "to": "kingslanding$", "right": "GenericAll", "inheritance": "None"},
                 "GenericAll_varys_domadmin" : {"for": "lord.varys", "to": "Domain Admins", "right": "GenericAll", "inheritance": "None"},
                 "GenericAll_varys_domadmin_holder" : {"for": "lord.varys", "to": "CN=AdminSDHolder,CN=System,DC=sevenkingdoms,DC=local", "right": "GenericAll", "inheritance": "None"},
-                "WriteDACL_renly_Crownlands" : {"for": "renly.baratheon", "to": "OU=Crownlands,DC=sevenkingdoms,DC=local", "right": "WriteDacl", "inheritance": "None"}
+                "WriteDACL_renly_Crownlands" : {"for": "renly.baratheon", "to": "OU=Crownlands,DC=sevenkingdoms,DC=local", "right": "WriteDacl", "inheritance": "None"},
+                "DCSync_getchanges_sccmaccountda" : {"for": "sccm.lab\\sccm-account-da", "to": "DC=sevenkingdoms,DC=local", "right": "Ext-DS-Replication-Get-Changes", "inheritance": "None"},
+                "DCSync_getchangesall_sccmaccountda" : {"for": "sccm.lab\\sccm-account-da", "to": "DC=sevenkingdoms,DC=local", "right": "Ext-DS-Replication-Get-Changes-All", "inheritance": "None"}
             },
             "users" : {
                 "tywin.lannister" : {
@@ -781,6 +785,16 @@
                     "description" : "Maester Pycelle",
                     "groups"      : ["Small Council"],
                     "path"        : "OU=Crownlands,DC=sevenkingdoms,DC=local"
+                },
+                "ravens_svc" : {
+                    "firstname"   : "ravens",
+                    "surname"     : "svc",
+                    "password"    : "Winter1sComing!",
+                    "city"        : "King's Landing",
+                    "description" : "raven network monitoring service account (password reused on sccm.lab by the IT team)",
+                    "groups"      : [],
+                    "path"        : "OU=Crownlands,DC=sevenkingdoms,DC=local",
+                    "spns"        : ["HTTP/kingslanding.sevenkingdoms.local"]
                 }
             }
         },
@@ -830,9 +844,18 @@
                         "members" : ["SCCMLAB\\CLIENT$","SCCMLAB\\MECM$","SCCMLAB\\MSSQL$","SCCMLAB\\DC$"]
                     }
                 },
-                "domainlocal" : {}
+                "domainlocal" : {
+                    "SCCM-Support-Access" : {
+                        "managed_by" : "alice",
+                        "path" : "CN=Users,DC=sccm,DC=lab"
+                    }
+                }
             },
-            "multi_domain_groups_member" : {},
+            "multi_domain_groups_member" : {
+                "SCCM-Support-Access" : [
+                    "sevenkingdoms.local\\maester.pycelle"
+                ]
+            },
             "acls" : {},
             "users" : {
                 "alice" : {
@@ -865,9 +888,9 @@
                 "dave" : {
                     "firstname"   : "dave",
                     "surname"     : "-",
-                    "password"    : "dragon",
+                    "password"    : "Winter1sComing!",
                     "city"        : "-",
-                    "description" : "dave",
+                    "description" : "dave - reuses the same password as the sevenkingdoms monitoring service account",
                     "groups"      : ["SCCM-Admins","RDPUsers"],
                     "path"        : "CN=Users,DC=sccm,DC=lab"
                 },
